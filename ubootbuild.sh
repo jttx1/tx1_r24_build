@@ -22,13 +22,13 @@ function _ubootinstall()
 	local UBOUTOUT_SRC
 
 	echo; echo -n "uboot install..."
-    if [ "$TARGET_DEV" = "p2371-0000" ]
-    then
+	if [ "$TARGET_DEV" = "p2371-0000" ]
+	then
 		local UBOUTOUT_SRC=$UBOUTOUT_0000
 		local UBOUTOUT_DST=$L4TOUT/bootloader/t210ref/p2371-0000/
 	else
 		local UBOUTOUT_SRC=$UBOUTOUT_2180
-        local UBOUTOUT_DST=$L4TOUT/bootloader/t210ref/p2371-2180/
+		local UBOUTOUT_DST=$L4TOUT/bootloader/t210ref/p2371-2180/
 	fi
 
 	cp $UBOUTOUT_SRC/u-boot $UBOUTOUT_DST

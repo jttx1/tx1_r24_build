@@ -9,9 +9,9 @@
 
 function flash()
 {
-    pushd ${L4TOUT} &> /dev/null
-    sudo ./flash.sh  $@ $TARGET_DEV mmcblk0p1;
-    popd &> /dev/null
+	pushd ${L4TOUT} &> /dev/null
+	sudo ./flash.sh  $@ $TARGET_DEV mmcblk0p1;
+	popd &> /dev/null
 }
 
 function kernel_dtb_update()

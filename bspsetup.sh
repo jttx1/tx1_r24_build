@@ -54,7 +54,7 @@ function _sources_setup()
 		popd &> /dev/null
 	fi
 
-    # kernel source
+	# kernel source
 	mkdir -p $TOP/.tmp
 	if [ ! -d  $KERNEL_PATH ]
 	then
@@ -87,16 +87,16 @@ function mm_api_sdk_setup()
 	fi
 
 	pushd $TARGET_ROOTFS/usr/lib &> /dev/null
-    sudo ln -sf $TEGRA_ARMABI/crt1.o crt1.o
-    sudo ln -sf $TEGRA_ARMABI/crti.o crti.o
-    sudo ln -sf $TEGRA_ARMABI/crtn.o crtn.o
+	sudo ln -sf $TEGRA_ARMABI/crt1.o crt1.o
+	sudo ln -sf $TEGRA_ARMABI/crti.o crti.o
+	sudo ln -sf $TEGRA_ARMABI/crtn.o crtn.o
 	popd &> /dev/null
 	pushd $TARGET_ROOTFS/usr/lib/$TEGRA_ARMABI &> /dev/null
-    sudo ln -sf libv4l2.so.0 libv4l2.so
-    sudo ln -sf tegra-egl/libEGL.so.1 libEGL.so
-    sudo ln -sf tegra-egl/libGLESv2.so.2 libGLESv2.so
-    sudo ln -sf tegra/libcuda.so.1.1 libcuda.so.1
-    sudo ln -sf ../../../lib/aarch64-linux-gnu/libdl.so.2 libdl.so
+	sudo ln -sf libv4l2.so.0 libv4l2.so
+	sudo ln -sf tegra-egl/libEGL.so.1 libEGL.so
+	sudo ln -sf tegra-egl/libGLESv2.so.2 libGLESv2.so
+	sudo ln -sf tegra/libcuda.so.1.1 libcuda.so.1
+	sudo ln -sf ../../../lib/aarch64-linux-gnu/libdl.so.2 libdl.so
 	popd &> /dev/null
 }
 
@@ -105,11 +105,11 @@ function l4tout_setup()
 	mkdir -p $TOP/64_TX1
 
 	echo -n "${yel}Are you sure to setup l4tout? [n/y] "
-    read ANSWER
-    if [ "$ANSWER"x != "y"x ]
+	read ANSWER
+	if [ "$ANSWER"x != "y"x ]
 	then
-        return 0
-    fi
+		return 0
+	fi
 	echo "${normal}"
 
 	sudo rm -rf $TOP/64_TX1/Linux_for_Tegra_64_tx1

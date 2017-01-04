@@ -25,152 +25,134 @@ function choosedevice()
 	fi
 
 	local index=0
-    local v
-    for v in ${TARGET_DEV_ARRAY[@]}
-    do
-        echo "     $index. $v"
-        index=$(($index+1))
-    done
+	local v
+	for v in ${TARGET_DEV_ARRAY[@]}
+	do
+		echo "     $index. $v"
+		index=$(($index+1))
+	done
 
-    local ANSWER
-    while [ -z "$TARGET_DEV" ]
-    do
-        echo -n "Which device would you choose? [$DEFAULT_TARGET_DEV] "
-        read ANSWER
+	local ANSWER
+	while [ -z "$TARGET_DEV" ]
+	do
+		echo -n "Which device would you choose? [$DEFAULT_TARGET_DEV] "
+		read ANSWER
 
-        if [ -z "$ANSWER" ] ; then
-            export TARGET_DEV=$DEFAULT_TARGET_DEV
-        else
+		if [ -z "$ANSWER" ] ; then
+			export TARGET_DEV=$DEFAULT_TARGET_DEV
+		else
 			if [ $ANSWER -lt ${#TARGET_DEV_ARRAY[@]} ]
 			then
-                export TARGET_DEV=${TARGET_DEV_ARRAY[$ANSWER]}
-            else
-                echo "** Not a valid device option: $ANSWER"
-            fi
-        fi
-    done
-
+				export TARGET_DEV=${TARGET_DEV_ARRAY[$ANSWER]}
+			else
+				echo "** Not a valid device option: $ANSWER"
+			fi
+		fi
+	done
 }
 
 function chooserelease()
 {
-    if [ ! -z "$TARGET_RELEASE" ]
-    then
-        return 0
-    fi
+	if [ ! -z "$TARGET_RELEASE" ]
+	then
+		return 0
+	fi
 
-    local index=0
-    local v
-    for v in ${TARGET_RELEASE_ARRAY[@]}
-    do
-        echo "     $index. $v"
-        index=$(($index+1))
-    done
+	local index=0
+	local v
+	for v in ${TARGET_RELEASE_ARRAY[@]}
+	do
+		echo "     $index. $v"
+		index=$(($index+1))
+	done
 
-    local ANSWER
-    while [ -z "$TARGET_RELEASE" ]
-    do
-        echo -n "Which release would you choose? [$DEFAULT_TARGET_RELEASE] "
-        read ANSWER
+	local ANSWER
+	while [ -z "$TARGET_RELEASE" ]
+	do
+		echo -n "Which release would you choose? [$DEFAULT_TARGET_RELEASE] "
+		read ANSWER
 
-        if [ -z "$ANSWER" ] ; then
-            export TARGET_RELEASE=$DEFAULT_TARGET_RELEASE
-        else
-            if [ $ANSWER -lt ${#TARGET_RELEASE_ARRAY[@]} ]
-            then
-                export TARGET_RELEASE=${TARGET_RELEASE_ARRAY[$ANSWER]}
-            else
-                echo "** Not a valid release option: $ANSWER"
-            fi
-        fi
-    done
+		if [ -z "$ANSWER" ] ; then
+			export TARGET_RELEASE=$DEFAULT_TARGET_RELEASE
+		else
+			if [ $ANSWER -lt ${#TARGET_RELEASE_ARRAY[@]} ]
+			then
+				export TARGET_RELEASE=${TARGET_RELEASE_ARRAY[$ANSWER]}
+			else
+				echo "** Not a valid release option: $ANSWER"
+			fi
+		fi
+	done
 }
 
 function set_tx1_user()
 {
-    if [ ! -z "$TX1_USER" ]
-    then
-        return 0
-    fi
+	if [ ! -z "$TX1_USER" ]
+	then
+		return 0
+	fi
 
-    local ANSWER
-    while [ -z "$TX1_USER" ]
-    do
-        echo -n "Login user of TX1 device? [ubuntu] "
-        read ANSWER
+	local ANSWER
+	while [ -z "$TX1_USER" ]
+	do
+		echo -n "Login user of TX1 device? [ubuntu] "
+		read ANSWER
 
-        if [ -z "$ANSWER" ] ; then
-            export TX1_USER=ubuntu
-        else
-            export TX1_USER=$ANSWER
-        fi
-    done
+		if [ -z "$ANSWER" ] ; then
+			export TX1_USER=ubuntu
+		else
+			export TX1_USER=$ANSWER
+		fi
+	done
 }
 
 function set_tx1_pwd()
 {
-    if [ ! -z "$TX1_PWD" ]
-    then
-        return 0
-    fi
+	if [ ! -z "$TX1_PWD" ]
+	then
+		return 0
+	fi
 
-    local ANSWER
-    while [ -z "$TX1_PWD" ]
-    do
-        echo -n "Login password of TX1 device? [ubuntu] "
-        read ANSWER
+	local ANSWER
+	while [ -z "$TX1_PWD" ]
+	do
+		echo -n "Login password of TX1 device? [ubuntu] "
+		read ANSWER
 
-
-        if [ -z "$ANSWER" ] ; then
-            export TX1_PWD=ubuntu
-        else
-            export TX1_PWD=$ANSWER
-        fi
-    done
+		if [ -z "$ANSWER" ] ; then
+			export TX1_PWD=ubuntu
+		else
+			export TX1_PWD=$ANSWER
+		fi
+	done
 }
 
 function set_tx1_ip()
 {
-    if [ ! -z "$TX1_IP" ]
-    then
-        return 0
-    fi
+	if [ ! -z "$TX1_IP" ]
+	then
+		return 0
+	fi
 
-    local ANSWER
-    while [ -z "$TX1_IP" ]
-    do
-        echo -n "IP address of TX1 device? "
-        read ANSWER
+	local ANSWER
+	while [ -z "$TX1_IP" ]
+	do
+		echo -n "IP address of TX1 device? "
+		read ANSWER
 
-        if [ -z "$ANSWER" ] ; then
+		if [ -z "$ANSWER" ] ; then
 			break;
-        else
-            export TX1_IP=$ANSWER
+		else
+			export TX1_IP=$ANSWER
 			break;
-        fi
-    done
+		fi
+	done
 }
 
 function _getnumcpus()
 {
 	NUMCPUS=2
-    NUMCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
-}
-
-function mm_api_sdk_setup()
-{
-	pushd ${TARGET_ROOTFS}/usr/lib/ &> /dev/null
-	sudo ln -sf ${TEGRA_ARMABI}/crt1.o crt1.o
-	sudo ln -sf ${TEGRA_ARMABI}/crti.o crti.o
-	sudo ln -sf ${TEGRA_ARMABI}/crtn.o crtn.o
-	popd &> /dev/null
-	pushd  ${TARGET_ROOTFS}/usr/lib/${TEGRA_ARMABI}/
-	sudo ln -sf libv4l2.so.0 libv4l2.so
-	sudo ln -sf tegra-egl/libEGL.so.1 libEGL.so
-	sudo ln -sf tegra-egl/libGLESv2.so.2 libGLESv2.so
-	sudo ln -sf tegra/libcuda.so.1.1 libcuda.so.1
-	sudo ln -sf ../../../lib/aarch64-linux-gnu/libdl.so.2 libdl.so
-	popd &> /dev/null
+	NUMCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 }
 
 choosedevice
@@ -195,7 +177,7 @@ read ANSWER
 if [ "$ANSWER"x = "n"x ]
 then
 	echo "rm -f $TOP/build/.config"
-    rm -f $TOP/build/.config
+	rm -f $TOP/build/.config
 	export TARGET_DEV=
 	export TARGET_RELEASE=
 	export TX1_USER=
@@ -219,9 +201,9 @@ AARCH64_TOOLCHAIN_LINK=https://developer.nvidia.com/embedded/dlc/l4t-gcc-toolcha
 ARMHF_TOOLCHAIN_LINK=https://developer.nvidia.com/embedded/dlc/l4t-gcc-toolchain-32-bit-24-2-1
 if [ "$TARGET_RELEASE" = "R24.2" ]
 then
-SOURCES_LINK=https://developer.nvidia.com/embedded/dlc/l4t-24-2-sources
+	SOURCES_LINK=https://developer.nvidia.com/embedded/dlc/l4t-24-2-sources
 else
-SOURCES_LINK=https://developer.nvidia.com/embedded/dlc/l4t-sources-24-2-1
+	SOURCES_LINK=https://developer.nvidia.com/embedded/dlc/l4t-sources-24-2-1
 fi
 
 # Toolchain
@@ -257,5 +239,3 @@ source $TOP/build/bspsetup.sh
 source $TOP/build/kernelbuild.sh
 source $TOP/build/ubootbuild.sh
 source $TOP/build/flashsetup.sh
-
-mm_api_sdk_setup
