@@ -157,6 +157,22 @@ function _getnumcpus()
     NUMCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 }
 
+function mm_api_sdk_setup()
+{
+	pushd ${TARGET_ROOTFS}/usr/lib/ &> /dev/null
+	sudo ln -sf ${TEGRA_ARMABI}/crt1.o crt1.o
+	sudo ln -sf ${TEGRA_ARMABI}/crti.o crti.o
+	sudo ln -sf ${TEGRA_ARMABI}/crtn.o crtn.o
+	popd &> /dev/null
+	pushd  ${TARGET_ROOTFS}/usr/lib/${TEGRA_ARMABI}/
+	sudo ln -sf libv4l2.so.0 libv4l2.so
+	sudo ln -sf tegra-egl/libEGL.so.1 libEGL.so
+	sudo ln -sf tegra-egl/libGLESv2.so.2 libGLESv2.so
+	sudo ln -sf tegra/libcuda.so.1.1 libcuda.so.1
+	sudo ln -sf ../../../lib/aarch64-linux-gnu/libdl.so.2 libdl.so
+	popd &> /dev/null
+}
+
 choosedevice
 chooserelease
 set_tx1_user
@@ -218,7 +234,7 @@ UBOOT_PATH=$TOP/u-boot
 UBOUTOUT_2180=$TOP/out/uboot-p2371-2180
 UBOUTOUT_0000=$TOP/out/uboot-p2371-0000
 TARGET_UBOUT_2180_DEFCONFIG=p2371-2180_defconfig
-TARGET_UBOUT_0000_DEFCONFIG=p2371-0000_defconfig
+TARGET_UBOUT_0000_DEFCONFIG=p2371-2180_defconfig
 
 # Kernel
 KERNEL_SRC=kernel_src.tbz2
@@ -241,3 +257,5 @@ source $TOP/build/bspsetup.sh
 source $TOP/build/kernelbuild.sh
 source $TOP/build/ubootbuild.sh
 source $TOP/build/flashsetup.sh
+
+mm_api_sdk_setup
